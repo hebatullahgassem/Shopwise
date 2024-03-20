@@ -1,20 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { MyContext } from "../context/Context";
 
 function Products() {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    async function fetchProducts() {
-      const response = await fetch("https://fakestoreapi.com/products");
-      const data = await response.json();
-      console.log(data);
-      setProducts(data);
-    }
-    fetchProducts();
-  }, []);
+  const { products, addToCart } = useContext(MyContext);
 
   return (
     <>
@@ -30,17 +21,20 @@ function Products() {
                 src={image}
                 className="max-h-[300px] h-full w-full duration-200 group-hover:brightness-50"
               />
-              <div className="p-3 pb-4 text-center">
+              <div className="p-3 pb-1 text-center">
                 <h1 className="font-semibold text-sm h-5 overflow-hidden mb-1">
                   {title}
                 </h1>
                 <p className="font-bold text-xs text-[#FF324D]">${price}</p>
-                <button className="bg-[#FF324D] border border-[#FF324D] hover:text-[#FF324D] hover:bg-white border cursor-pointer rounded-3xl p-2 mt-2 text-white text-sm text-center ps-8 pe-8">
-                  <FontAwesomeIcon className="w-3 pe-2" icon={faCartShopping} />
-                  Add To Cart
-                </button>
               </div>
             </Link>
+            <button
+              onClick={() => addToCart(product)}
+              className="bg-[#FF324D] text-center border border-[#FF324D] hover:text-[#FF324D] ms-4 hover:bg-white border cursor-pointer rounded-3xl p-2 mt-2 text-white text-sm text-center ps-8 pe-8"
+            >
+              <FontAwesomeIcon className="w-3 pe-2" icon={faCartShopping} />
+              Add To Cart
+            </button>
           </li>
         );
       })}
